@@ -1,0 +1,22 @@
+{
+    "/api/**": {
+        "target": "http://74.48.4.179:8080/",  
+        "secure": false,  
+        "loglevel": "debug",  
+        "Origin": true  
+    },
+
+    "/api/authenticate": {
+        "target": "http://74.48.4.179:8080/",   
+        "secure": false,
+        "loglevel": "debug",  
+        "Origin": true
+    }, 
+
+    "/services/**": {  
+        "target": "http://74.48.4.179:8080/",  
+        "secure": false, 
+        "loglevel": "debug",   
+        "Origin": true  
+    }
+} 

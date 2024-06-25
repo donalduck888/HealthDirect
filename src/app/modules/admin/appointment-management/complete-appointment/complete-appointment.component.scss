@@ -1,0 +1,28 @@
+th {
+    background-color: rgba(0, 128, 128, 0.536);
+}
+
+td {
+    text-align: center;
+    background-color: rgba(0, 128, 128, 0.245);
+}
+
+
+table,
+th,
+td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+table {
+    border-radius: 12px;
+}
+
+ 
+.mat-mdc-form-field-subscript-wrapper {
+    box-sizing: border-box;
+    width: 100%;
+    position: relative;
+    display: none;
+}

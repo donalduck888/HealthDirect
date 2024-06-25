@@ -1,0 +1,90 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+    <!-- Products list -->
+
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+
+        <div class="text-4xl font-extrabold tracking-tight">
+            Appointments
+        </div>
+
+        <!-- Buttons for switching views -->
+        <div class="flex justify-center gap-x-2 mb-0 mt-0">
+
+            <button mat-stroked-button [color]=" currentView==='today' ? 'accent':'primary'" mwlCalendarToday
+                [(viewDate)]="viewDate" (viewDateChange)="selectedDay = {date:$event}" aria-label="Today"
+                matTooltip="Today">
+                <mat-icon>today</mat-icon> Today
+            </button>
+            <button mat-stroked-button [color]=" currentView==='month' ? 'accent':'primary'"
+                (click)="switchToMonthView()"
+                [class.active]="currentView === 'month'"><mat-icon>view_module</mat-icon>Month</button>
+            <button mat-stroked-button [color]=" currentView==='week' ? 'accent':'primary'" (click)="switchToWeekView()"
+                [class.active]="currentView === 'week'"><mat-icon>view_week</mat-icon>Week</button>
+            <button mat-stroked-button [color]=" currentView==='day' ? 'accent':'primary'" (click)="switchToDayView()"
+                [class.active]="currentView === 'day'"><mat-icon>view_day</mat-icon>Day</button>
+        </div>
+
+
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <!-- Search -->
+            <!-- <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                <input matInput [autocomplete]="'off'" [placeholder]="'Search Appointment'" />
+            </mat-form-field> -->
+            <!-- Add product button -->
+            <button class="ml-4" mat-mini-fab color="primary" (click)="addEvent()">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon></button>
+        </div>
+
+    </div>
+
+    <div style="background-color: teal; font-size: medium;" class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-0">
+        <button mat-icon-button class="ml-120" mwlCalendarPreviousView [view]="currentView" [(viewDate)]="viewDate"
+            (viewDateChange)="dateChange({date:$event})" aria-label="Previous">
+            <mat-icon style="color: aliceblue;">chevron_left</mat-icon>
+        </button>
+
+        <div class="title" style="color: aliceblue;">
+            {{ viewDate | calendarDate:(currentView + 'ViewTitle'):'en' }}
+        </div>
+        <!-- (viewDateChange)="selectedDay = {date:$event};"   -->
+
+        <button mat-icon-button class="arrow" mwlCalendarNextView [view]="currentView" [(viewDate)]="viewDate"
+            (viewDateChange)="dateChange({date:$event})" aria-label="Next">
+            <mat-icon style="color: aliceblue;">chevron_right</mat-icon>
+        </button>
+    </div>
+
+
+
+    <div class="flex flex-auto overflow-hidden">
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <ng-container>
+                <ng-container>
+
+                    <mwl-calendar-month-view *ngIf="currentView === 'month'" [events]="events" [refresh]="refresh"
+                        (eventTimesChanged)="eventTimesChanged($event)" [viewDate]="viewDate"
+                        (beforeViewRender)="beforeMonthViewRender($event)"
+                        (eventClicked)="appointEvent($event.event.id)" [activeDayIsOpen]="activeDayIsOpen"
+                        (dayClicked)="dayClicked($event.day)">
+                    </mwl-calendar-month-view>
+
+                    <mwl-calendar-week-view *ngIf="currentView === 'week'" [events]="events" [refresh]="refresh"
+                        [viewDate]="viewDate" (dayClicked)="dayClicked($event.day)"
+                        (eventTimesChanged)="eventTimesChanged($event)"
+                        (eventClicked)="editEvent('edit', $event.event)">
+                    </mwl-calendar-week-view>
+
+                    <mwl-calendar-day-view *ngIf="currentView === 'day'" [events]="events" [refresh]="refresh"
+                        [viewDate]="viewDate" (dayClicked)="dayClicked($event.day)"
+                        (eventClicked)="editEvent('edit', $event.event)"
+                        (eventTimesChanged)="eventTimesChanged($event)">
+                    </mwl-calendar-day-view>
+
+                </ng-container>
+            </ng-container>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,14 @@
+version: '2'
+services:
+  webserver-iha:
+    image: nginx-iha
+    build: .
+    ports:
+      - 8090:80
+
+#   webserver-iha:
+#     image: heavenscode/ihaweb:v0.01
+#     ports:
+#       - 80:80
+
+

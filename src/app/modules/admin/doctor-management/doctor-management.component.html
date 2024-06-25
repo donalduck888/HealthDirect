@@ -1,0 +1,373 @@
+<div class="sm:absolute sm:inset-0 flex flex-col flex-auto min-w-0 sm:overflow-hidden bg-card dark:bg-transparent">
+    <!-- Header -->
+    <div
+        class="relative flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between py-8 px-6 md:px-8 border-b">
+        <!-- Loader -->
+        <!-- <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+
+        </div> -->
+        <!-- Title -->
+        <div class="text-4xl font-extrabold tracking-tight">
+            Doctor Management
+        </div>
+        <!-- Actions -->
+        <div class="flex shrink-0 items-center mt-6 sm:mt-0 sm:ml-4">
+            <!-- Search -->
+            <mat-form-field class="fuse-mat-dense fuse-mat-rounded min-w-64" [subscriptSizing]="'dynamic'">
+                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:search'"></mat-icon>
+                <input matInput [formControl]="searchInputControl" [autocomplete]="'off'"
+                    [placeholder]="'Search doctors'" />
+            </mat-form-field>
+            <!-- Add product button -->
+            <a class="ml-4" mat-flat-button [color]="'primary'" (click)="createUser()" [routerLink]="['./add-doctor']">
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                <span class="ml-2 mr-1">Add</span></a>
+            <!-- <button
+                class="ml-4"
+                mat-flat-button
+                [color]="'primary'"
+                (click)="createUser()"
+            >
+                <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+                <span class="ml-2 mr-1">Add</span>
+            </button> -->
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+        <!-- Products list -->
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <ng-container *ngIf="users as iusers">
+                <ng-container *ngIf="iusers.length > 0; else noProducts">
+                    <div class="grid">
+                        <!-- Header -->
+                        <div class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            matSort matSortDisableClear>
+                            <!-- <div [mat-sort-header]="'id'">ID</div> -->
+                            <div [mat-sort-header]="'login'">NAME</div>
+                            <div [mat-sort-header]="'active'">ACTIVE</div>
+                            <div [mat-sort-header]="'authorities'">
+                                DESIGNATION
+                            </div>
+                            <div [mat-sort-header]="'createdDate'">
+                                CREATED DATE
+                            </div>
+                            <!-- <div [mat-sort-header]="'updatedDate'">
+                                UPDATED DATE
+                            </div> -->
+                            <div [mat-sort-header]="'modifiedDate'">
+                                PHONE
+                            </div>
+                            <div [mat-sort-header]="'modifiedBy'">
+                                QUALIFICATION
+                            </div>
+
+                            <div [mat-sort-header]="'any'">Details</div>
+                        </div>
+
+                        <!-- Rows -->
+                        <ng-container *ngIf="users as products">
+                            <ng-container *ngFor="
+                                    let product of products;
+                                    trackBy: trackByFn
+                                ">
+                                <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+                                    <!-- <div class="truncate">
+                                       <small>{{ product.id }} </small>
+                                    </div> -->
+
+                                    <div class="truncate">
+                                        {{ product.name }}
+                                    </div>
+
+                                    <div class="truncate">
+                                        <!-- {{ product.activated }} -->
+                                        <mat-slide-toggle color="primary" [checked]="product.isActive" (change)="
+                                                toggleActive(product, $event)
+                                            "></mat-slide-toggle>
+                                    </div>
+
+                                    <div class="truncate">
+                                        {{
+                                        product.designation
+                                        }}
+                                    </div>
+                                    <div class="truncate">
+                                        {{
+                                        product.createdDate | date : "short"
+                                        }}
+                                    </div>
+
+                                    <!-- <div class="truncate">
+                                        {{
+                                            product.updatedDate| date : "short"
+                                        }}
+                                    </div> -->
+
+                                    <div class="truncate">
+                                        {{ product.phone }}
+                                    </div>
+
+                                    <div class="truncate">
+                                        {{ product.qualificationName }}
+                                    </div>
+
+                                    <!-- Details button -->
+                                    <div>
+                                        <button class="min-w-10 min-h-7 h-7 px-2 leading-6" color="primary"
+                                            mat-flat-button (click)="toggleDetails(product.id)">
+                                            <mat-icon class="icon-size-5" [svgIcon]="
+                                                    selectedUser?.id ===
+                                                    product.id
+                                                        ? 'heroicons_solid:chevron-up'
+                                                        : 'heroicons_solid:chevron-down'
+                                                "></mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="grid">
+                                    <ng-container *ngIf="selectedUser?.id === product.id">
+                                        <ng-container *ngTemplateOutlet="
+                                                rowDetailsTemplate;
+                                                context: { $implicit: product }
+                                            "></ng-container>
+                                    </ng-container>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+
+
+                    <mat-paginator
+                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                        [ngClass]="{'pointer-events-none': isLoading}" [length]="pagination.length"
+                        [pageIndex]="pagination.page" [pageSize]="pagination.size" [pageSizeOptions]="[5, 10, 25, 100]"
+                        [showFirstLastButtons]="true" (page)="onPageChange($event)">
+                    </mat-paginator>
+                </ng-container>
+            </ng-container>
+
+            <ng-template #rowDetailsTemplate let-product>
+                <div class="shadow-lg overflow-hidden">
+                    <div class="flex border-b">
+                        <!-- Selected user form -->
+                        <form class="flex flex-col w-full" [formGroup]="selectedProductForm">
+
+                            <div class="flex flex-col sm:flex-row p-8 form">
+
+                                <div class="flex flex-auto flex-wrap">
+                                    <!-- Name, Username, Authorities -->
+                                    <div class="flex flex-col w-full lg:w-2/4 sm:pl-8">
+
+                                        <!-- Username -->
+                                        <mat-form-field class="w-full">
+                                            <mat-label>NAME</mat-label>
+                                            <input matInput [formControlName]="'name'">
+                                        </mat-form-field>
+                                        <!-- First Name -->
+                                        <mat-form-field class="w-full">
+                                            <mat-label>DESIGNATION</mat-label>
+                                            <input matInput [formControlName]="'designation'">
+                                        </mat-form-field>
+
+                                        <!-- created date -->
+                                        <mat-form-field class="w-full">
+                                            <mat-label>CREATED DATE</mat-label>
+                                            <input [formControlName]="'createdDate'" matInput [matDatepicker]="picker" readonly>
+                                            <mat-datepicker-toggle></mat-datepicker-toggle>
+
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-full">
+                                            <mat-label>PHONE NUMBER</mat-label>
+                                            <input matInput [formControlName]="'phone'">
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-full">
+                                            <mat-label>QUALIFICATION</mat-label>
+                                            <input matInput [formControlName]="'qualificationName'">
+                                        </mat-form-field>
+
+                                        <div class="flex flex-col mt-8">
+                                            <span class="font-semibold mb-2">Active status</span>
+                                            <mat-slide-toggle [formControlName]="'isActive'" [color]="'primary'">
+                                                {{selectedProductForm.get('isActive').value === true ? 'isActive' :
+                                                'notActive'}}
+                                            </mat-slide-toggle>
+                                        </div>
+                                    </div>
+                                    <div class="flex flex-col lg:w-1/6 pr-4 pt-5 sm:pl-10">
+
+                                        <span class="font-semibold mb-2 ">Monday</span>
+                                        <mat-slide-toggle class="w-20" [formControlName]="'monava'" [color]="'primary'">
+                                            {{selectedProductForm.get('monava').value === true ? 'isActive' :
+                                            'notActive'}}
+                                        </mat-slide-toggle>
+                                        <span class="font-semibold mb-2 mt-9">Tuesday</span>
+                                        <mat-slide-toggle class="w-20" [formControlName]="'tueava'" [color]="'primary'">
+                                            {{selectedProductForm.get('tueava').value === true ? 'isActive' :
+                                            'notActive'}}
+                                        </mat-slide-toggle>
+
+                                        <span class="font-semibold mb-2 mt-10">Wednesday</span> 
+                                        <mat-slide-toggle class="w-20" [formControlName]="'wedava'" [color]="'primary'">
+                                            {{selectedProductForm.get('wedava').value === true ? 'isActive' :
+                                            'notActive'}}
+                                        </mat-slide-toggle>
+
+                                        <span class="font-semibold mb-2 mt-10">Thursday</span>
+                                        <mat-slide-toggle class="w-20" [formControlName]="'thuava'" [color]="'primary'">
+                                            {{selectedProductForm.get('thuava').value === true ? 'isActive' :
+                                            'notActive'}}
+                                        </mat-slide-toggle>
+
+                                        <span class="font-semibold mb-2 mt-10">Friday</span>
+                                        <mat-slide-toggle class="w-20" [formControlName]="'friava'" [color]="'primary'">
+                                            {{selectedProductForm.get('friava').value === true ? 'isActive' :
+                                            'notActive'}}
+                                        </mat-slide-toggle>
+
+                                        <span class="font-semibold mb-1 mt-10">Saturday</span>
+                                        <mat-slide-toggle class="w-20" [formControlName]="'satava'" [color]="'primary'">
+                                            {{selectedProductForm.get('satava').value === true ? 'isActive' :
+                                            'notActive'}}
+                                        </mat-slide-toggle>
+
+                                        <span class="font-semibold mb-1 mt-10">Tuesday</span>
+                                        <mat-slide-toggle class="w-20" [formControlName]="'sunava'" [color]="'primary'">
+                                            {{selectedProductForm.get('sunava').value === true ? 'isActive' :
+                                            'notActive'}}
+                                        </mat-slide-toggle>
+                                    </div>
+
+                                    <div class="flex flex-col pr-10 pl-4" >
+                                        <mat-form-field class="w-30">
+                                            <mat-label> From </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTime" [format]="24" [formControlName]="'monfrom'">
+                                            <ngx-material-timepicker format="24" #fullTime></ngx-material-timepicker>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-30">
+                                            <mat-label> From </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimetue" [format]="24" [formControlName]="'tuefrom'">
+                                            <ngx-material-timepicker format="24" #fullTimetue></ngx-material-timepicker>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-30">
+                                            <mat-label> From </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimewed" [format]="24" [formControlName]="'wedfrom'">
+                                            <ngx-material-timepicker format="24" #fullTimewed></ngx-material-timepicker>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-30">
+                                            <mat-label> From </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimethu" [format]="24" [formControlName]="'thufrom'">
+                                            <ngx-material-timepicker format="24" #fullTimethu></ngx-material-timepicker>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-30">
+                                            <mat-label> From </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimefri" [format]="24" [formControlName]="'frifrom'">
+                                            <ngx-material-timepicker format="24" #fullTimefri></ngx-material-timepicker>
+                                        </mat-form-field>
+
+                                        <mat-form-field class="w-30">
+                                            <mat-label> From </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimesat" [format]="24" [formControlName]="'satfrom'">
+                                            <ngx-material-timepicker format="24" #fullTimesat></ngx-material-timepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-30">
+                                            <mat-label> From </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimesun" [format]="24" [formControlName]="'sunfrom'">
+                                            <ngx-material-timepicker format="24" #fullTimesun></ngx-material-timepicker>
+                                        </mat-form-field>
+
+                                    </div>
+                                    <div class="flex flex-col pr-10">
+                                        <mat-form-field class="w-30">
+                                            <mat-label> To </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimemon0" [format]="24" [formControlName]="'monto'">
+                                            <ngx-material-timepicker format="24" #fullTimemon0></ngx-material-timepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-30">
+                                            <mat-label> To </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimetue0" [format]="24" [formControlName]="'tueto'">
+                                            <ngx-material-timepicker format="24" #fullTimetue0></ngx-material-timepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-30">
+                                            <mat-label> To </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimewed0" [format]="24" [formControlName]="'wedto'">
+                                            <ngx-material-timepicker format="24" #fullTimewed0></ngx-material-timepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-30">
+                                            <mat-label> To </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimethu0" [format]="24" [formControlName]="'thuto'">
+                                            <ngx-material-timepicker format="24" #fullTimethu0></ngx-material-timepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-30">
+                                            <mat-label> To </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimefri0" [format]="24" [formControlName]="'frito'">
+                                            <ngx-material-timepicker format="24" #fullTimefri0></ngx-material-timepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-30">
+                                            <mat-label> To </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimesat0" [format]="24" [formControlName]="'satto'">
+                                            <ngx-material-timepicker format="24" #fullTimesat0></ngx-material-timepicker>
+                                        </mat-form-field>
+                                        <mat-form-field class="w-30">
+                                            <mat-label> To </mat-label>
+                                            <input matInput placeholder="24hr format" aria-label="24hr format"
+                                                [ngxTimepicker]="fullTimesun0" [format]="24" [formControlName]="'sunto'">
+                                            <ngx-material-timepicker format="24" #fullTimesun0></ngx-material-timepicker>
+                                        </mat-form-field>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between w-full border-t px-8 py-4" style="border-color: #CBC8C8;">
+                                <button class="-ml-1" type="button" mat-button style="background-color: #E76565; color:aliceblue" (click)="deleteSelectedUser(user)">
+                                    Delete
+                                </button>
+                                <div class="flex items-center">
+                                    <div class="flex items-center mr-4" *ngIf="flashMessage">
+                                        <ng-container *ngIf="flashMessage === 'success'">
+                                            <mat-icon class="text-green-500"
+                                                [svgIcon]="'heroicons_outline:check'"></mat-icon>
+                                            <span class="ml-2">User updated</span>
+                                        </ng-container>
+                                        <ng-container *ngIf="flashMessage === 'error'">
+                                            <mat-icon class="text-red-500" [svgIcon]="'heroicons_outline:x'"></mat-icon>
+                                            <span class="ml-2">An error occurred, try again!</span>
+                                        </ng-container>
+                                    </div>
+                                    <button mat-flat-button type="submit" [color]="'primary'" (click)="updateSelectedProduct(user)">
+                                        Update
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template #noProducts>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">
+                    There are no doctors!
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>

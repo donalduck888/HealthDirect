@@ -1,0 +1,107 @@
+
+ <!-- CONTENT GOES HERE -->
+        <table mat-table [dataSource]="dataSource" matSort>
+            <!-- ID Column -->
+            <ng-container matColumnDef="id"  >
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    ID
+                </th>
+                <td mat-cell *matCellDef="let row"><marquee scrollamount="1"> {{ row.id }}</marquee ></td>
+            </ng-container>
+
+            <!-- Progress Column -->
+            <ng-container matColumnDef="login">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Login
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.login }}</td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Email
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.email }}</td>
+            </ng-container>
+
+            <!-- Fruit Column -->
+            <ng-container matColumnDef="activated">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Activate
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-slide-toggle
+                        color="warn"
+                        [checked]="row.activated"
+                        (change)="toggleActive(row, $event)"
+                    ></mat-slide-toggle>
+                </td>
+            </ng-container>
+
+            <!-- language Column -->
+            <ng-container matColumnDef="langKey">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Language
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    {{ row.langKey }}
+                </td>
+            </ng-container>
+            <!-- profiles Column -->
+            <ng-container matColumnDef="authorities">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Profiles
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <p *ngFor="let item of row.authorities">
+                        {{ item }}
+                    </p>
+                    <!-- {{ row.authorities[0] }}
+                    {{ row.authorities[1] ?? "" }} -->
+                </td>
+            </ng-container>
+
+            <!-- created date Column -->
+            <ng-container matColumnDef="createdDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Created Date
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    {{ row.createdDate | date : "MM/dd/yy h:mm " }}
+                </td>
+            </ng-container>
+
+            <!-- modified by Column -->
+            <ng-container matColumnDef="lastModifiedBy">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Modified By
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    {{ row.lastModifiedBy }}
+                </td>
+            </ng-container>
+
+            <!-- modified date Column -->
+            <ng-container matColumnDef="lastModifiedDate">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    Modified Date
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    {{ row.lastModifiedDate | date : "MM/dd/yy h:mm " }}
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr
+                mat-row
+                *matRowDef="let row; columns: displayedColumns"
+            ></tr>
+
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" colspan="4">
+                    No data matching the filter "{{ input.value }}"
+                </td>
+            </tr>
+        </table>

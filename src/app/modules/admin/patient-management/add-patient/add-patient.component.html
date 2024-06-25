@@ -1,0 +1,217 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full max-w-4xl">
+            <div class="-ml-4 sm:mt-8">
+                <a mat-button [routerLink]="['../']" [color]="'primary'">
+                    <mat-icon
+                        [svgIcon]="'heroicons_outline:arrow-narrow-left'"
+                    ></mat-icon>
+                    <span class="ml-2">Back to Patient Management</span>
+                </a>
+            </div>
+            <div
+                class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight"
+            >
+                Create Patient
+            </div>
+            <!-- Form -->
+            <div
+                class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card"
+            >
+                <!-- Alert -->
+                <fuse-alert
+                    class="mb-8"
+                    *ngIf="alert"
+                    [type]="alert.type"
+                    [showIcon]="false"
+                >
+                    {{ alert.message }}
+                </fuse-alert>
+                <form
+                    class="space-y-3"
+                    [formGroup]="addUserForm"
+                    #addDoctorNgForm="ngForm"
+                >
+                    <div class="mb-6">
+                        <div class="text-2xl font-bold tracking-tight">
+                            Submit your request
+                        </div>
+                        <div class="text-secondary">
+                            Your request will be processed and our support staff
+                            will get back to you in 24 hours.
+                        </div>
+                    </div>
+
+                    <!-- name -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'patientName'"
+                            [required]="true"
+                        />
+                        <mat-label>Patient Name</mat-label>
+                        <mat-error
+                            *ngIf="addUserForm.get('patientName').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- gender -->
+                    <!-- <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'gender'"
+                            [required]="true"
+                        />
+                        <mat-label>Gender</mat-label>
+                       <mat-error
+                            *ngIf="addUserForm.get('gender').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field> -->
+
+
+                    <!-- dob -->
+                    <mat-form-field class="w-full">
+                        <mat-label>Date of Birth</mat-label>
+                        <input [formControlName]="'dob'" matInput [matDatepicker]="picker">
+                        <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+                    <!-- contact person -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'contactPerson'"
+                            [required]="true"
+                        />
+                        <mat-label>Contact Person</mat-label>
+                        <mat-error
+                            *ngIf="addUserForm.get('contactPerson').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- address -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'address'"
+                            [required]="true"
+                        />
+                        <mat-label>Address</mat-label>
+                        <mat-error
+                            *ngIf="addUserForm.get('address').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- phoneNo -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'phoneNo'"
+                            [required]="true"
+                        />
+                        <mat-label>Contact No</mat-label>
+                        <mat-error
+                            *ngIf="addUserForm.get('phoneNo').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- ref No -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'referenceNo'"
+                            [required]="true"
+                        />
+                        <mat-label>Reference No</mat-label>
+                        <mat-error
+                            *ngIf="addUserForm.get('referenceNo').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- city -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'city'"
+                            [required]="true"
+                        />
+                        <mat-label>City</mat-label>
+                        <mat-error
+                            *ngIf="addUserForm.get('city').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- state -->
+                    <mat-form-field class="w-full">
+                        <input
+                            matInput
+                            [formControlName]="'state'"
+                            [required]="true"
+                        />
+                        <mat-label>State</mat-label>
+                        <mat-error
+                            *ngIf="addUserForm.get('state').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+
+                    <!-- remarks -->
+                    <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'remarks'" />
+                        <mat-label>Remarks</mat-label>
+                    </mat-form-field>
+
+
+
+                    <!--Activated -->
+                    <mat-checkbox class="flex items-center h-10 min-h-10 pl-1 pr-4"
+                        [color]="'primary'" [checked]="addUserForm.get('active')" [formControlName]="'active'"
+                    >
+                        Active 
+                    </mat-checkbox>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end">
+                        <button mat-button [color]="'accent'"
+                            [disabled]="addUserForm.pristine || addUserForm.untouched" (click)="clearForm()"
+                        >
+                            Clear
+                        </button>
+
+                        <button
+                            class="ml-2"
+                            mat-flat-button
+                            [color]="'primary'"
+                            [disabled]="
+                                addUserForm.pristine || addUserForm.invalid
+                            "
+                            (click)="sendForm()"   
+                        >
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

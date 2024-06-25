@@ -1,0 +1,353 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full max-w-4xl">
+            <div class="-ml-4 sm:mt-8">
+                <a mat-button [routerLink]="['../']" [color]="'primary'">
+                    <mat-icon [svgIcon]="'heroicons_outline:arrow-narrow-left'"></mat-icon>
+                    <span class="ml-2">Back to Doctor Management</span>
+                </a>
+            </div>
+            <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
+                Create Doctor
+            </div>
+            <!-- Form -->
+            <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <!-- Alert -->
+                <fuse-alert class="mb-8" *ngIf="alert" [type]="alert.type" [showIcon]="false">
+                    {{ alert.message }}
+                </fuse-alert>
+                <form class="space-y-3" [formGroup]="addUserForm" #addDoctorNgForm="ngForm">
+                    <div class="mb-6">
+                        <div class="text-2xl font-bold tracking-tight">
+                            Submit your request
+                        </div>
+                        <div class="text-secondary">
+                            Your request will be processed and our support staff
+                            will get back to you in 24 hours.
+                        </div>
+                    </div>
+
+                    <!-- name -->
+                    <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'name'" [required]="true" />
+                        <mat-label>Doctor Name</mat-label>
+                        <mat-error *ngIf="addUserForm.get('name').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'name'" [required]="true" />
+                        <mat-label>Clinic Name</mat-label>
+                        <mat-error *ngIf="addUserForm.get('name').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>   -->
+
+                    <mat-form-field class="w-full">
+                        <mat-label>Clinic Name</mat-label>
+                        <mat-select matInput name="clinicId" formControlName="clinicId">
+                            <mat-error *ngIf="addUserForm.get('clinicId').hasError('required')">
+                                Required
+                            </mat-error>
+                            <ng-container *ngFor="let clinic of clinics">
+                                <mat-option [value]="clinic.clinicName">
+                                    {{ clinic.clinicName }}
+                                </mat-option>
+                            </ng-container>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'designation'" [required]="true" />
+                        <mat-label>Designation</mat-label>
+                        <mat-error *ngIf="addUserForm.get('designation').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'qualificationName'" [required]="true" />
+                        <mat-label>Qualification Name</mat-label>
+                        <mat-error *ngIf="addUserForm.get('qualificationName').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field> -->
+
+                    <mat-form-field class="w-full">
+                        <mat-label>Qualification</mat-label>
+                        <mat-select matInput name="qualificationName" formControlName="qualificationID">
+                            <mat-error *ngIf="addUserForm.get('qualificationID').hasError('required')">
+                                Required
+                            </mat-error>
+                            <ng-container *ngFor="let qualification of qualifications">
+                                <mat-option [value]="qualification.qualificationName">
+                                    {{ qualification.qualificationName }}
+                                </mat-option>
+                            </ng-container>
+
+                        </mat-select>
+                    </mat-form-field>
+
+                    <div class="flex flex-row gap-x-5">
+
+                        <mat-form-field class="w-full">
+                            <mat-label>Created Date</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="createdDate" readonly>
+                            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                            <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+
+                        <mat-form-field class="w-full">
+                            <mat-label>Updated Date</mat-label>
+                            <input [formControlName]="'updatedDate'" matInput [matDatepicker]="updatedPicker">
+                            <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                            <mat-datepicker-toggle matIconSuffix [for]="updatedPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #updatedPicker></mat-datepicker>
+                        </mat-form-field>
+
+                    </div>
+
+                    <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'phone'" [required]="true" />
+                        <mat-label>Phone Number</mat-label>
+                        <mat-error *ngIf="addUserForm.get('phone').hasError('required')"> 
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!--Activated -->
+                    <mat-checkbox class="flex items-center h-10 min-h-10 pl-1 pr-4" [color]="'primary'"
+                        [checked]="addUserForm.get('isActive')" [formControlName]="'isActive'">
+                        Activated
+                    </mat-checkbox>
+                    <br>
+
+                    <!-- Doctor schedule -->
+                    <div style="text-align: center;">
+                        <mat-label class="docschedule"> Doctor Schedule </mat-label>
+                    </div>
+
+                    <br>
+
+                    <!-- Monday -->
+                    <div class="row" class="space-x-3">
+                        <!-- flex items-center h-10 min-h-10 pl-1 pr-4 -->
+                        <mat-checkbox class="w-50" [color]="'primary'" [checked]="addUserForm.get('monava')"
+                            [formControlName]="'monava'">
+                            Monday
+                        </mat-checkbox>
+
+                        <ng-container *ngIf="addUserForm.get('monava').value">
+
+                            <mat-label> From </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <!-- <input matInput [ngxTimepicker]="picker" placeholder="Time from"> -->
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTime" [format]="24" [formControlName]="'monfrom'">
+                                <ngx-material-timepicker format="24" #fullTime></ngx-material-timepicker>
+                            </mat-form-field>
+
+                            <mat-label class="w-30"> To </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTime1" [format]="24" [formControlName]="'monto'">
+                                <ngx-material-timepicker #fullTime1></ngx-material-timepicker>
+                            </mat-form-field>
+                        </ng-container>
+                    </div>
+
+                    <!-- Tuesday -->
+                    <div class="row" class="space-x-3">
+                        <!-- flex items-center h-10 min-h-10 pl-1 pr-4 -->
+                        <mat-checkbox class="w-50" [color]="'primary'" [checked]="addUserForm.get('tueava')"
+                            [formControlName]="'tueava'">
+                            Tuesday
+                        </mat-checkbox>
+
+                        <ng-container *ngIf="addUserForm.get('tueava').value">
+
+                            <mat-label> From </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput [formControlName]="'tuefrom'" placeholder="24hr format"
+                                    aria-label="24hr format" [ngxTimepicker]="fullTimetu" [format]="24">
+                                <ngx-material-timepicker #fullTimetu></ngx-material-timepicker>
+                            </mat-form-field>
+
+                            <mat-label class="w-30"> To </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimetu0" [format]="24" [formControlName]="'tueto'">
+                                <ngx-material-timepicker #fullTimetu0></ngx-material-timepicker>
+                            </mat-form-field>
+                        </ng-container>
+                    </div>
+
+
+                    <!-- Wednesday -->
+                    <div class="row" class="space-x-3">
+                        <!-- flex items-center h-10 min-h-10 pl-1 pr-4 -->
+                        <mat-checkbox class="w-50" [color]="'primary'" [checked]="addUserForm.get('wedava')"
+                            [formControlName]="'wedava'">
+                            Wednesday
+                        </mat-checkbox>
+
+                        <ng-container *ngIf="addUserForm.get('wedava').value">
+
+                            <mat-label> From </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimewed" [format]="24" [formControlName]="'wedfrom'">
+                                <ngx-material-timepicker #fullTimewed></ngx-material-timepicker>
+                            </mat-form-field>
+
+                            <mat-label class="w-30"> To </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimewed0" [format]="24" [formControlName]="'wedto'">
+                                <ngx-material-timepicker #fullTimewed0></ngx-material-timepicker>
+                            </mat-form-field>
+                        </ng-container>
+                    </div>
+
+
+                    <!-- Thursday -->
+                    <div class="row" class="space-x-3">
+                        <!-- flex items-center h-10 min-h-10 pl-1 pr-4 -->
+                        <mat-checkbox class="w-50" [color]="'primary'" [checked]="addUserForm.get('thuava')"
+                            [formControlName]="'thuava'">
+                            Thursday
+                        </mat-checkbox>
+
+                        <ng-container *ngIf="addUserForm.get('thuava').value">
+
+                            <mat-label> From </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimethu" [format]="24" [formControlName]="'thufrom'">
+                                <ngx-material-timepicker #fullTimethu></ngx-material-timepicker>
+                            </mat-form-field>
+
+                            <mat-label class="w-30"> To </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimethu0" [format]="24" [formControlName]="'thuto'">
+                                <ngx-material-timepicker #fullTimethu0></ngx-material-timepicker>
+                            </mat-form-field>
+                        </ng-container>
+                    </div>
+
+
+                    <!-- Friday -->
+                    <div class="row" class="space-x-3">
+                        <!-- flex items-center h-10 min-h-10 pl-1 pr-4 -->
+                        <mat-checkbox class="w-50" [color]="'primary'" [checked]="addUserForm.get('friava')"
+                            [formControlName]="'friava'">
+                            Friday
+                        </mat-checkbox>
+
+                        <ng-container *ngIf="addUserForm.get('friava').value">
+
+                            <mat-label> From </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimefri" [format]="24" [formControlName]="'frifrom'">
+                                <ngx-material-timepicker #fullTimefri></ngx-material-timepicker>
+                            </mat-form-field>
+
+                            <mat-label class="w-30"> To </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimefri0" [format]="24" [formControlName]="'frito'">
+                                <ngx-material-timepicker #fullTimefri0></ngx-material-timepicker>
+                            </mat-form-field>
+                        </ng-container>
+                    </div>
+
+
+                    <!-- Saturday -->
+                    <div class="row" class="space-x-3">
+                        <!-- flex items-center h-10 min-h-10 pl-1 pr-4 -->
+                        <mat-checkbox class="w-50" [color]="'primary'" [checked]="addUserForm.get('satava')"
+                            [formControlName]="'satava'">
+                            Saturday
+                        </mat-checkbox>
+
+                        <ng-container *ngIf="addUserForm.get('satava').value">
+
+                            <mat-label> From </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimesat" [format]="24" [formControlName]="'satfrom'">
+                                <ngx-material-timepicker #fullTimesat></ngx-material-timepicker>
+                            </mat-form-field>
+
+                            <mat-label class="w-30"> To </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimesat0" [format]="24" [formControlName]="'satto'">
+                                <ngx-material-timepicker #fullTimesat0></ngx-material-timepicker>
+                            </mat-form-field>
+                        </ng-container>
+                    </div>
+
+                    <!-- Sunday -->
+                    <div class="row" class="space-x-3">
+                        <!-- flex items-center h-10 min-h-10 pl-1 pr-4 -->
+                        <mat-checkbox class="w-50" [color]="'primary'" [checked]="addUserForm.get('sunava')"
+                            [formControlName]="'sunava'">
+                            Sunday
+                        </mat-checkbox>
+
+                        <ng-container *ngIf="addUserForm.get('sunava').value">
+
+                            <mat-label> From </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimesun" [format]="24" [formControlName]="'sunfrom'">
+                                <ngx-material-timepicker #fullTimesun></ngx-material-timepicker>
+                            </mat-form-field>
+
+                            <mat-label class="w-30"> To </mat-label>
+
+                            <mat-form-field class="w-50">
+                                <input matInput placeholder="24hr format" aria-label="24hr format"
+                                    [ngxTimepicker]="fullTimesun0" [format]="24" [formControlName]="'sunto'">
+                                <ngx-material-timepicker #fullTimesun0></ngx-material-timepicker>
+                            </mat-form-field>
+                        </ng-container>
+                    </div>
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end">
+                        <button mat-button [color]="'accent'" [disabled]="
+                                addUserForm.pristine || addUserForm.untouched
+                            " (click)="clearForm()">
+                            Clear
+                        </button>
+                        <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="
+                              addUserForm.invalid
+                            " (click)="sendForm()">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

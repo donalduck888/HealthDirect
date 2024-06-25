@@ -1,0 +1,35 @@
+.event-form-dialog {
+
+  // Media breakpoint for extra small screens (xs)
+  @media (max-width: 599.98px) {
+    width: 100%;
+  }
+
+  // Media breakpoint for screens greater than extra small (gt-xs)
+  @media (min-width: 600px) {
+    width: 480px;
+  }
+
+  .mat-dialog-container {
+    padding: 0;
+  }
+
+  .dialog-content-wrapper {
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .primary-color-input,
+  .secondary-color-input {
+    padding: 6px 8px;
+  }
+
+}
+
+.datepicker {
+  border: 1px solid rgb(194, 183, 183); 
+  text-align: center; 
+  margin-left: 10px;
+  border-radius: 5px; 
+}

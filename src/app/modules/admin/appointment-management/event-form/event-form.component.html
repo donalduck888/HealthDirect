@@ -1,0 +1,101 @@
+<h1 style="background-color: teal; color: azure; font-size: large;" mat-dialog-title>{{dialogTitle}}</h1>
+
+<div mat-dialog-content>
+    <form name="eventForm" [formGroup]="eventForm" class="event-form w-50-p" fxLayout="column" fxFlex>
+        <mat-form-field class="w-full pt-5">
+            <mat-label>Doctors</mat-label>
+            <mat-select matInput formControlName="doctorId" (selectionChange)="onDoctorSelection($event.value)">
+                <ng-container *ngFor="let doctor of doctors">
+                    <mat-option [value]="doctor.id">
+                        {{ doctor.name }}
+                    </mat-option>
+                </ng-container>
+            </mat-select>
+        </mat-form-field>
+
+        <mat-form-field style="width: 100%;">
+            <mat-label>Select patient</mat-label>
+            <input matInput style="width: 100%;" [matAutocomplete]="auto" formControlName="patientName">
+            <mat-autocomplete style="width: 100%;" [displayWith]="displayFn" #auto="matAutocomplete">
+                <mat-option *ngFor="let option of patients " [value]="option">
+                    {{option.patientName}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+
+        <mat-form-field class="w-full">
+            <mat-label>Appointment Type</mat-label>
+            <mat-select matInput formControlName="appointmentType">
+                <mat-option [value]="'TELEMEDICINE'">
+                    TELEMEDICINE
+                </mat-option>
+                <mat-option [value]="'PHYSICAL '">
+                    PHYSICAL
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <div class="flex flex-row gap-x-5">
+            <mat-form-field class="w-full pt-0">
+                <mat-label>Select a Day</mat-label>
+                <mat-select matInput name="day" formControlName="dayOfWeek" 
+                    (selectionChange)="onDaySelect($event.value)">
+                    <mat-option *ngIf="selectedDoctor.monava" [value]="'monday'">
+                        Monday
+                    </mat-option>
+                    <mat-option *ngIf="selectedDoctor.tueava" [value]="'tuesday'">
+                        Tuesday
+                    </mat-option>
+                    <mat-option *ngIf="selectedDoctor.wedava" [value]="'wednsday'">
+                        Wednsday
+                    </mat-option>
+                    <mat-option *ngIf="selectedDoctor.thuava" [value]="'thursday'">
+                        Thursday
+                    </mat-option>
+                    <mat-option *ngIf="selectedDoctor.friava" [value]="'friday'">
+                        Friday
+                    </mat-option>
+                    <mat-option *ngIf="selectedDoctor.satava" [value]="'saturday'">
+                        Saturday
+                    </mat-option>
+                    <mat-option *ngIf="selectedDoctor.sunava" [value]="'sunday'">
+                        Sunday
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-form-field class="w-full pt-0">
+                <mat-label>Select the Date</mat-label>
+                <mat-select matInput name="day" formControlName="appDate"
+                    (selectionChange)="onDateSelect($event.value)">
+                    <mat-option *ngFor="let item of avaDates" [value]="item">
+                        {{item}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <mat-form-field class="w-full pt-5">
+            <mat-label>Comment</mat-label>
+            <textarea matInput name="extraInfo" formControlName="extraInfo"></textarea>
+        </mat-form-field>
+
+    </form>
+</div>
+
+<div mat-dialog-actions>
+    <button mat-button (click)="matDialogRef.close()">No Thanks</button>
+    <!-- <button *ngIf="action ==='edit'" mat-button color="primary" class="mr-8"
+        (click)="matDialogRef.close(['delete',eventForm])" aria-label="Delete" matTooltip="Delete">
+        DELETE 
+    </button> -->
+
+    <button *ngIf="action !== 'edit'" mat-button color="primary" class="save-button"
+        (click)="matDialogRef.close(eventForm)" [disabled]="eventForm.invalid" aria-label="ADD">
+        <span *ngIf="action === 'new'">CREATE</span>  
+    </button>
+
+    <button mat-button color="primary" class="save-button" (click)="matDialogRef.close([action, eventForm])"
+        [disabled]="eventForm.invalid" aria-label="SAVE">
+        <span *ngIf="action === 'edit'">UPDATE</span>
+
+    </button>
+</div>

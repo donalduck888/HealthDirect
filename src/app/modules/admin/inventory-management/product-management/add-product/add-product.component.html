@@ -1,0 +1,131 @@
+<div class="flex flex-col flex-auto min-w-0">
+    <!-- Main -->
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class="flex flex-col w-full max-w-4xl">
+            <div class="-ml-4 sm:mt-8">
+                <a mat-button [routerLink]="['../']" [color]="'primary'">
+                    <mat-icon [svgIcon]="'heroicons_outline:arrow-narrow-left'"></mat-icon>
+                    <span class="ml-2">Back to Product List</span>
+                </a>
+            </div>
+            <div class="mt-2 text-4xl sm:text-7xl font-extrabold tracking-tight leading-tight">
+                Add Product
+            </div>
+            <!-- Form -->
+            <div class="mt-8 sm:mt-12 p-6 pb-7 sm:p-10 sm:pb-7 shadow rounded-2xl bg-card">
+                <!-- Alert -->
+                <fuse-alert class="mb-8" *ngIf="alert" [type]="alert.type" [showIcon]="false">
+                    {{ alert.message }}
+                </fuse-alert>
+                <form class="space-y-3" [formGroup]="addProductForm" #addProductNgForm="ngForm">
+                    <div class="mb-6">
+                        <div class="text-2xl font-bold tracking-tight">
+                            Submit your request
+                        </div>
+                        <div class="text-secondary">
+                            Your request will be processed and our support staff
+                            will get back to you in 24 hours.
+                        </div>
+                    </div>
+
+                    <!-- code -->
+                    <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'productCode'" [required]="true" />
+                        <mat-label>Product Code</mat-label>
+                        <mat-error *ngIf="addProductForm.get('productCode').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- name -->
+                    <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'productName'" [required]="true" />
+                        <mat-label>Product Name</mat-label>
+                        <mat-error *ngIf="addProductForm.get('productName').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- description -->
+                    <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'productDesp'" [required]="true" />
+                        <mat-label>Product Description</mat-label>
+                        <mat-error *ngIf="addProductForm.get('productDesp').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- retail price -->
+                    <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'retailPrice'" [required]="true" />
+                        <mat-label>Retail Price</mat-label>
+                        <mat-error *ngIf="addProductForm.get('retailPrice').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+                    <!-- tax -->
+                    <mat-checkbox class="flex items-center h-10 min-h-10 pl-1 pr-4" [color]="'primary'"
+                        [checked]="addProductForm.get('priceIncludeTax')" [formControlName]="'priceIncludeTax'">
+                        Price Include TAX
+                    </mat-checkbox>
+
+                    <br>
+
+                    <!-- qty -->
+                    <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'qty'" [required]="true" />
+                        <mat-label>Stock Qty</mat-label>
+                        <mat-error *ngIf="addProductForm.get('qty').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <!-- discountPrice -->
+                    <mat-form-field class="w-full">
+                        <input matInput [formControlName]="'discountPrice'" [required]="true" />
+                        <mat-label>Discount Price</mat-label>
+                        <mat-error *ngIf="addProductForm.get('discountPrice').hasError('required')">
+                            Required
+                        </mat-error>
+                    </mat-form-field>
+
+
+                    <mat-form-field class="w-full">
+                        <mat-label>Expire Date</mat-label>
+                        <input [formControlName]="'expireDate'" matInput [matDatepicker]="picker">
+                        <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+
+
+
+
+                    <!--Activated -->
+                    <mat-checkbox class="flex items-center h-10 min-h-10 pl-1 pr-4" [color]="'primary'"
+                        [checked]="addProductForm.get('active')" [formControlName]="'active'">
+                        Available
+                    </mat-checkbox>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-end">
+                        <button mat-button [color]="'accent'" [disabled]="
+                        addProductForm.pristine || addProductForm.untouched
+                            " (click)="clearForm()">
+                            Clear
+                        </button>
+                        <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="
+                        addProductForm.pristine || addProductForm.invalid
+                            " (click)="sendForm()">
+                            Submit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

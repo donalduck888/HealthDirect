@@ -1,0 +1,124 @@
+<div mat-dialog-title>
+  <h1 style="background-color: teal; color: azure; font-size: large; "class="py-3 px-2">Complete this Appointment -
+    {{appointment.appointmentType}}</h1>
+  <table *ngIf="appointment" class="table" style="width: 100%;  ">
+    <tr>
+      <th>Doctor Name</th>
+      <td>{{ appointment.doctorName }}</td>
+      <th>Pateint Name</th>
+      <td>{{ appointment.patientName }}</td>
+      <th>Waiting Number</th>
+      <td>{{ appointment.waitingNumber }}</td>
+    </tr>
+    <tr>
+      <th>Appointment Date</th>
+      <td>{{ appointment.appDate | date:'yyyy-MM-dd' }}</td>
+      <th>Appointment Start</th>
+      <td>{{ parseTimeZone(appointment.appTimeFrom) | date:'hh:mm a' }}</td>
+      <th>Appointment End</th>
+      <td>{{ parseTimeZone(appointment.appTimeTo) | date:'hh:mm a' }}</td>
+    </tr>
+
+  </table>
+
+</div>
+
+<mat-dialog-content class="pt-5 h-3/4">
+ 
+  <!-- class="mt-2 sm:mt-2 mb-4 p-6 sm:p-10 shadow rounded-2xl bg-card border-solid border-2 border-teal-500  " -->
+  <div>
+    <fuse-alert class="mb-0" *ngIf="alert" [type]="alert.type" [showIcon]="false">
+      {{ alert.message }}
+    </fuse-alert>
+    <form class="space-y-1" [formGroup]="addUserForm">
+      <div class="mb-0">
+        <div class="text-2xl font-bold tracking-tight">
+          Add Treatment Note 
+        </div>
+      </div>
+      <div class="flex flex-row gap-x-5">
+        <mat-form-field class="w-90">
+          <input matInput [formControlName]="'doctorName'" readonly />
+          <mat-label>Doctor Name</mat-label>
+        </mat-form-field>
+
+        <mat-form-field class="w-90">
+          <input matInput [formControlName]="'patientName'" readonly />
+          <mat-label>Pateint Name</mat-label>
+        </mat-form-field>
+
+        <mat-form-field class="w-90">
+          <input matInput [formControlName]="'issueDate'" readonly/> 
+          <mat-label>Date</mat-label>
+        </mat-form-field>
+
+
+      </div>
+
+      <div>
+        <p style="font-size: large; font-weight: bold;">Medical Prescriptions</p>
+      </div>
+
+      <div formArrayName="products">
+
+        <div *ngFor="let entity of entityArray.controls; let i = index"   [style]="{'background-color': i%2===1? 'rgba(0, 128, 128, 0.245)':'rgba(0, 128, 128, 0.105)'}"  [formGroupName]="i">
+          <div class="flex flex-row gap-x-1 py-2 px-2"  >
+            <mat-form-field class="w-50">
+              <!-- <mat-label>Product Name</mat-label> -->
+              <mat-select matInput [formControlName]="'productName'" placeholder="Product Name" (selectionChange)="updateRetailPrice(i)">
+                <ng-container *ngFor="let pro of products">
+                  <mat-option [value]="pro.id">
+                    {{ pro.productName }}
+                  </mat-option>
+                </ng-container>
+              </mat-select>
+
+            </mat-form-field>
+            <mat-form-field class="w-30">
+              <input matInput [formControlName]="'qty'" type="number" (input)="updateCost()" />
+              
+            </mat-form-field>
+            <mat-form-field class="w-30">
+              <input matInput [formControlName]="'retailPrice'" type="number" (input)="updateCost()" readonly />
+              <!-- <mat-label>Retail Price</mat-label> -->
+            </mat-form-field>
+            <mat-form-field class="w-30">
+              <input matInput [formControlName]="'cost'" readonly />
+              <!-- <mat-label>Total Price</mat-label> -->
+            </mat-form-field>
+            <button type="button" (click)="removeEntity(i)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+       
+        </div>
+
+
+
+      </div>
+      <button mat-flat-button color="primary" type="button" (click)="addEntity()">Add New Product</button>
+
+    </form>
+  </div>
+
+</mat-dialog-content>
+
+
+
+
+<mat-dialog-actions>
+
+  <a mat-flat-button color="warn" class="w-60" *ngIf="appointment?.appointmentType === 'TELEMEDICINE'"
+    href="https://tele.homec.ch/peer.html?stream={{appointment?.id}}" target="_blank"> 
+    Video Call <mat-icon>call</mat-icon> 
+  </a> 
+
+  <div style="display: flex; flex: 1 1 auto">   
+  
+  </div>
+   
+  <button mat-button (click)="onNoClick()">Cancel</button>
+
+  <button class="ml-2" mat-flat-button [color]="'primary'" [disabled]="addUserForm.pristine || addUserForm.invalid "
+    (click)="sendForm()"> Submit </button>
+</mat-dialog-actions>
